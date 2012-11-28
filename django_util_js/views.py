@@ -16,9 +16,10 @@
 #     HomePage: http://www.vimer.cn
 #
 #      Created: 2012-11-28 15:11:48
-#      Version: 0.0.1
+#      Version: 0.0.2
 #      History:
 #               0.0.1 | dantezhu | 2012-11-28 15:11:48 | init
+#               0.0.2 | dantezhu | 2012-11-28 21:13:39 | no cache
 #
 #=============================================================================
 """
@@ -141,4 +142,5 @@ def django_util_js(request):
     content = UTIL_JS_TPL % js_patterns
 
     response = HttpResponse(content, mimetype='text/javascript')
+    response['Cache-Control'] = 'no-cache'
     return response
