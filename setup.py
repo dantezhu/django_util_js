@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="django_util_js",
-    version="0.0.2",
+    version="0.0.3",
     zip_safe=False,
     platforms='any',
     packages=['django_util_js'],

@@ -11,10 +11,11 @@
 #     HomePage: http://www.vimer.cn
 #
 #      Created: 2012-11-28 15:11:48
-#      Version: 0.0.2
+#      Version: 0.0.3
 #      History:
 #               0.0.1 | dantezhu | 2012-11-28 15:11:48 | init
 #               0.0.2 | dantezhu | 2012-11-28 21:13:39 | no cache
+#               0.0.3 | dantezhu | 2012-11-29 23:36:24 | url encode
 #
 #=============================================================================
 """
@@ -25,11 +26,39 @@ import types
 from django.utils.datastructures import SortedDict
 from django.conf import settings
 from django.http import HttpResponse
-import django.utils.simplejson as json
 from django.core.urlresolvers import RegexURLPattern, RegexURLResolver
+from django.shortcuts import RequestContext
+from django.template import Context, loader
 
 UTIL_JS_TPL = """
+{% autoescape off %}
+
 var django_util = function(){
+
+    function url_encode(clearString) {
+        var output = '';
+        var x = 0;
+        clearString = clearString.toString();
+        var regex = /(^[a-zA-Z0-9-_.]*)/;
+        while (x < clearString.length) {
+            var match = regex.exec(clearString.substr(x));
+            if (match != null && match.length > 1 && match[1] != '') {
+                output += match[1];
+                x += match[1].length;
+            } else {
+                if (clearString.substr(x, 1) == ' ') {
+                    output += '+';
+                }
+                else {
+                    var charCode = clearString.charCodeAt(x);
+                    var hexVal = charCode.toString(16);
+                    output += '%' + ( hexVal.length < 2 ? '0' : '' ) + hexVal.toUpperCase();
+                }
+                x++;
+            }
+        }
+        return output;
+    }
 
     function _get_path(name, kwargs, urls)
     {
@@ -51,7 +80,7 @@ var django_util = function(){
                 {
                     throw(key + ' does not exist in ' + _path);
                 }
-                path = path.replace('<' + key +'>', kwargs[key]);
+                path = path.replace('<' + key +'>', url_encode(kwargs[key]));
             }
         }
 
@@ -70,7 +99,7 @@ var django_util = function(){
         url_for: function(name, kwargs, urls) {
             if (!urls)
             {
-                urls = django_urlconf || {};
+                urls = django_url_conf || {};
             }
 
             return _get_path(name, kwargs, urls);
@@ -79,7 +108,9 @@ var django_util = function(){
 
 }();
 
-var django_urlconf = %s;
+var django_url_conf = {{ django_url_conf }};
+
+{% endautoescape %}
 """
 
 def django_util_js(request):
@@ -134,7 +165,13 @@ def django_util_js(request):
     js_patterns = SortedDict()
     handle_url_module(js_patterns, settings.ROOT_URLCONF)
 
-    content = UTIL_JS_TPL % js_patterns
+    t = loader.get_template_from_string(UTIL_JS_TPL)
+    c = Context(dict(
+        django_url_conf=js_patterns,
+    ))
+    c.update(RequestContext(request))
+    
+    content = t.render(c)
 
     response = HttpResponse(content, mimetype='text/javascript')
     response['Cache-Control'] = 'no-cache'
