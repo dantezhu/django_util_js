@@ -4,12 +4,7 @@
 #=============================================================================
 #
 #     FileName: views.py
-#         Desc: 
-#           1. add to INSTALLED_APPS
-#           2. add to urls.py
-#               url(r'^django_util.js$', 'django_util_js.views.django_util_js', {}, 'django_util_js'),
-#           3. add to html
-#               {% url django_util_js %}
+#         Desc: django's util in javascript. such as url_for etc.
 #
 #       Author: dantezhu
 #        Email: zny2008@gmail.com
