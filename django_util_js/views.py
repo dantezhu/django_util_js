@@ -16,6 +16,7 @@
 #               0.0.2 | dantezhu | 2012-11-28 21:13:39 | no cache
 #               0.0.3 | dantezhu | 2012-11-29 23:36:24 | url encode
 #               0.0.4 | dantezhu | 2012-11-30 11:00:46 | content-type
+#               0.0.5 | dantezhu | 2013-07-16 12:06:59 | 使用encodeURIComponent，否则中文有问题
 #
 #=============================================================================
 """
@@ -34,31 +35,6 @@ UTIL_JS_TPL = """
 {% autoescape off %}
 
 var django_util = function(){
-
-    function url_encode(clearString) {
-        var output = '';
-        var x = 0;
-        clearString = clearString.toString();
-        var regex = /(^[a-zA-Z0-9-_.]*)/;
-        while (x < clearString.length) {
-            var match = regex.exec(clearString.substr(x));
-            if (match != null && match.length > 1 && match[1] != '') {
-                output += match[1];
-                x += match[1].length;
-            } else {
-                if (clearString.substr(x, 1) == ' ') {
-                    output += '+';
-                }
-                else {
-                    var charCode = clearString.charCodeAt(x);
-                    var hexVal = charCode.toString(16);
-                    output += '%' + ( hexVal.length < 2 ? '0' : '' ) + hexVal.toUpperCase();
-                }
-                x++;
-            }
-        }
-        return output;
-    }
 
     function _get_path(name, kwargs, urls)
     {
@@ -80,7 +56,7 @@ var django_util = function(){
                 {
                     throw(key + ' does not exist in ' + _path);
                 }
-                path = path.replace('<' + key +'>', url_encode(kwargs[key]));
+                path = path.replace('<' + key +'>', encodeURIComponent(kwargs[key]));
             }
         }
 
