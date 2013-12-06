@@ -94,6 +94,11 @@ def django_util_js(request):
     RE_KWARG = re.compile(r"(\(\?P\<(.*?)\>.*?\))") #Pattern for recongnizing named parameters in urls
     RE_ARG = re.compile(r"(\(.*?\))") #Pattern for recognizing unnamed url parameters
 
+    def force_src(src):
+        if src is None:
+            src = ''
+        return src.encode('utf8') if isinstance(src, unicode) else src
+
     def handle_url_module(js_patterns, module_name, prefix=""):
         """
         Load the module and output all of the patterns
@@ -128,10 +133,10 @@ def django_util_js(request):
                     if args_matches:
                         for el in args_matches:
                             full_url = full_url.replace(el, "<>")#replace by a empty parameter name
-                    js_patterns[pattern.name] = "/" + full_url
+                    js_patterns[force_src(pattern.name)] = force_src("/" + full_url)
                     # add by dantezhu
                     if hasattr(pattern, '_callback_str'):
-                        js_patterns[pattern._callback_str] = "/" + full_url
+                        js_patterns[force_src(pattern._callback_str)] = force_src("/" + full_url)
 
             elif issubclass(pattern.__class__, RegexURLResolver):
                 if pattern.urlconf_name:
