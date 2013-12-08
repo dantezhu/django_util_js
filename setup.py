@@ -3,7 +3,7 @@ import django_util_js
 
 setup(
     name="django_util_js",
-    version='.'.join([str(v) for v in django_util_js.__version__]),
+    version=django_util_js.__version__,
     zip_safe=False,
     platforms='any',
     packages=['django_util_js'],
