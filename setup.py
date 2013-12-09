@@ -7,6 +7,7 @@ setup(
     zip_safe=False,
     platforms='any',
     packages=['django_util_js'],
+    install_requires=['django'],
     url="https://github.com/dantezhu/django_util_js",
     license="BSD",
     author="dantezhu",
