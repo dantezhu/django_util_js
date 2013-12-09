@@ -118,8 +118,8 @@ def django_util_js(request):
 
         for pattern in patterns:
             if issubclass(pattern.__class__, RegexURLPattern):
-            # add by dantezhu
-                if pattern.name or hasattr(pattern, '_callback_str'):
+                # add by dantezhu
+                if pattern.name or getattr(pattern, '_callback_str', None):
                     full_url = prefix + pattern.regex.pattern
                     for chr in ["^","$"]:
                         full_url = full_url.replace(chr, "")
@@ -134,9 +134,10 @@ def django_util_js(request):
                     if args_matches:
                         for el in args_matches:
                             full_url = full_url.replace(el, "<>")#replace by a empty parameter name
-                    js_patterns[force_str(pattern.name)] = force_str("/" + full_url)
+                    if pattern.name:
+                        js_patterns[force_str(pattern.name)] = force_str("/" + full_url)
                     # add by dantezhu
-                    if hasattr(pattern, '_callback_str'):
+                    if getattr(pattern, '_callback_str', None):
                         js_patterns[force_str(pattern._callback_str)] = force_str("/" + full_url)
 
             elif issubclass(pattern.__class__, RegexURLResolver):
