@@ -121,6 +121,9 @@ def django_util_js(request):
                 # add by dantezhu
                 if pattern.name or getattr(pattern, '_callback_str', None):
                     full_url = prefix + pattern.regex.pattern
+                    # 为了解决类似 /site\_media\/
+                    full_url = re.sub(r'\\(\S)', '\\1', full_url)
+
                     for chr in ["^","$"]:
                         full_url = full_url.replace(chr, "")
                     #handle kwargs, args
