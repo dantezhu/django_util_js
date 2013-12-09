@@ -19,6 +19,6 @@ django's util in javascript. such as url_for etc.
     <script src="{% url django_util_js.views.django_util_js %}" type="text/javascript" charset="utf-8"></script>
 
 
-###### use url_for in your js file
+###### use url_for in your js code
 
     var url = django_util.url_for('sub.bpt_index', {y:2, x:'/sdf'});
