@@ -36,6 +36,8 @@ UTIL_JS_TPL = """
 
 var django_util = function(){
 
+    var url_map = {{ url_map }};
+
     function _get_path(name, kwargs, urls)
     {
 
@@ -75,16 +77,15 @@ var django_util = function(){
         url_for: function(name, kwargs, urls) {
             if (!urls)
             {
-                urls = django_url_conf || {};
+                urls = url_map || {};
             }
 
             return _get_path(name, kwargs, urls);
-        }
+        },
+        url_map: url_map
     };
 
 }();
-
-var django_url_conf = {{ django_url_conf }};
 
 {% endautoescape %}
 """
@@ -148,7 +149,7 @@ def django_util_js(request):
 
     t = loader.get_template_from_string(UTIL_JS_TPL)
     c = Context(dict(
-        django_url_conf=js_patterns,
+        url_map=js_patterns,
     ))
     c.update(RequestContext(request))
     
