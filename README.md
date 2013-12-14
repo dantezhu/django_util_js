@@ -16,7 +16,7 @@ django's util in javascript. such as url_for etc.
 
 ###### load django_util.js in your html file
 
-    <script src="{% url django_util_js.views.django_util_js %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% url 'django_util_js.views.django_util_js' %}" type="text/javascript" charset="utf-8"></script>
 
 
 ###### use url_for in your js code
