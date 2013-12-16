@@ -4,7 +4,7 @@ django's util in javascript. such as url_for etc.
 
 ### usage
 
-###### install flask_util_js to your server app
+###### install django_util_js to your server app
 
     1. add to INSTALLED_APPS
         INSTALLED_APPS = (
