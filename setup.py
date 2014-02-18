@@ -1,9 +1,8 @@
 from setuptools import setup
-import django_util_js
 
 setup(
     name="django_util_js",
-    version=django_util_js.__version__,
+    version='0.0.14',
     zip_safe=False,
     platforms='any',
     packages=['django_util_js'],
