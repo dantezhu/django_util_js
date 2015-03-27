@@ -33,29 +33,24 @@ from django.template import Context, loader
 
 UTIL_JS_TPL = """
 {% autoescape off %}
-
-var django_util = function(){
+var django_util = function() {
 
     var rule_map = {{ rule_map }};
 
-    function _get_path(name, kwargs, urls)
-    {
+    function _get_path(name, kwargs, urls) {
 
         var path = urls[name] || false;
 
-        if (!path)
-        {
+        if (!path) {
             throw('URL not found for view: ' + name);
         }
 
         var _path = path;
 
         var key;
-        for (key in kwargs)
-        {
+        for (key in kwargs) {
             if (kwargs.hasOwnProperty(key)) {
-                if (!path.match('<' + key +'>'))
-                {
+                if (!path.match('<' + key +'>')) {
                     throw(key + ' does not exist in ' + _path);
                 }
                 path = path.replace('<' + key +'>', encodeURIComponent(kwargs[key]));
@@ -64,8 +59,7 @@ var django_util = function(){
 
         var re = new RegExp('<[a-zA-Z0-9-_]{1,}>', 'g');
         var missing_args = path.match(re);
-        if (missing_args)
-        {
+        if (missing_args) {
             throw('Missing arguments (' + missing_args.join(", ") + ') for url ' + _path);
         }
 
@@ -75,8 +69,7 @@ var django_util = function(){
 
     return {
         url_for: function(name, kwargs, urls) {
-            if (!urls)
-            {
+            if (!urls) {
                 urls = rule_map || {};
             }
 
@@ -86,7 +79,6 @@ var django_util = function(){
     };
 
 }();
-
 {% endautoescape %}
 """
 
