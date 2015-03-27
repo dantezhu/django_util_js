@@ -31,7 +31,7 @@ from django.core.urlresolvers import RegexURLPattern, RegexURLResolver
 from django.shortcuts import RequestContext
 from django.template import Context, loader
 
-UTIL_JS_TPL = """
+UTIL_JS_TPL = '''
 {% autoescape off %}
 var django_util = function() {
 
@@ -80,7 +80,7 @@ var django_util = function() {
 
 }();
 {% endautoescape %}
-"""
+'''
 
 def django_util_js(request):
 
